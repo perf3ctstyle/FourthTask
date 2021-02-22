@@ -3,23 +3,32 @@ package com.epam.task.fourth.entities;
 import com.epam.task.fourth.enums.Currency;
 import com.epam.task.fourth.enums.Transport;
 
-public class ForeignTouristVoucher extends AbstractTouristVoucher {
+import javax.xml.bind.annotation.*;
 
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType
+@XmlRootElement(name="TouristVouchers")
+public class ForeignTouristVoucher extends AbstractTouristVoucher {
+    @XmlElement(namespace = "http://www.example.com/TouristVouchers")
     private String country;
 
     public ForeignTouristVoucher() {}
 
-    public ForeignTouristVoucher(Transport transport, Currency currency, int cost, String id, String country) {
-        super(transport, currency, cost, id);
+    public ForeignTouristVoucher(Transport transport, Currency currency, int costValue, String id) {
+        super(transport, currency, costValue, id);
+    }
+
+    public ForeignTouristVoucher(Transport transport, Currency currency, int costValue, String id, String country) {
+        super(transport, currency, costValue, id);
         this.country = country;
     }
 
     public ForeignTouristVoucher(AbstractTouristVoucher touristVoucher) {
-        super(touristVoucher.getTransport(), touristVoucher.getCurrency(), touristVoucher.getCost(), touristVoucher.getId());
+        super(touristVoucher.getTransport(), touristVoucher.getCurrency(), touristVoucher.getCostValue(), touristVoucher.getId());
     }
 
     public String getCountry() {
-        return this.country;
+        return country;
     }
 
     public void setCountry(String country) {
@@ -53,9 +62,9 @@ public class ForeignTouristVoucher extends AbstractTouristVoucher {
         return "ForeignTouristVoucher{" +
                 "transport=" + this.getTransport() +
                 ", currency=" + this.getCurrency() +
-                ", cost=" + this.getCost() +
+                ", costValue=" + this.getCostValue() +
                 ", id='" + this.getId() +
-                ", country='" + country + '\'' +
+                "', country='" + country + '\'' +
                 '}';
     }
 }

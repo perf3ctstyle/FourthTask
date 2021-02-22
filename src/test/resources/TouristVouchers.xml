@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<TouristVouchers xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns="http://www.example.com/TouristVouchers"
+                 xsi:schemaLocation="http://www.example.com/TouristVouchers  TouristVouchers.xsd">
+
+    <ForeignTouristVoucher id="v555666">
+        <transport>car</transport>
+        <currency>USD</currency>
+        <costValue>200</costValue>
+        <country>Saudi Arabia</country>
+    </ForeignTouristVoucher>
+
+    <ForeignTouristVoucher id="v123321">
+        <transport>plane</transport>
+        <currency>EUR</currency>
+        <costValue>1000</costValue>
+        <country>Turkey</country>
+    </ForeignTouristVoucher>
+
+    <PilgrimageTouristVoucher id="v932234">
+        <transport>train</transport>
+        <currency>BYN</currency>
+        <costValue>500</costValue>
+        <country>Israel</country>
+    </PilgrimageTouristVoucher>
+
+    <PilgrimageTouristVoucher id="v551346" security="true">
+        <transport>boat</transport>
+        <currency>USD</currency>
+        <costValue>1350</costValue>
+        <country>India</country>
+    </PilgrimageTouristVoucher>
+
+</TouristVouchers>

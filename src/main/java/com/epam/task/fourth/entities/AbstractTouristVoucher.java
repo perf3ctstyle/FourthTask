@@ -3,19 +3,28 @@ package com.epam.task.fourth.entities;
 import com.epam.task.fourth.enums.Currency;
 import com.epam.task.fourth.enums.Transport;
 
-public abstract class AbstractTouristVoucher {
+import javax.xml.bind.annotation.*;
 
+
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType
+public abstract class AbstractTouristVoucher {
+    @XmlElement(namespace = "http://www.example.com/TouristVouchers")
     private Transport transport;
+    @XmlElement(namespace = "http://www.example.com/TouristVouchers")
     private Currency currency;
-    private int cost;
+    @XmlElement(namespace = "http://www.example.com/TouristVouchers")
+    private int costValue;
+    @XmlAttribute(required = true)
+    @XmlID
     private String id;
 
     public AbstractTouristVoucher() {}
 
-    public AbstractTouristVoucher(Transport transport, Currency currency, int cost, String id) {
+    public AbstractTouristVoucher(Transport transport, Currency currency, int costValue, String id) {
         this.transport = transport;
         this.currency = currency;
-        this.cost = cost;
+        this.costValue = costValue;
         this.id = id;
     }
 
@@ -27,8 +36,8 @@ public abstract class AbstractTouristVoucher {
         return this.currency;
     }
 
-    public int getCost() {
-        return this.cost;
+    public int getCostValue() {
+        return this.costValue;
     }
 
     public String getId() {
@@ -43,8 +52,8 @@ public abstract class AbstractTouristVoucher {
         this.currency = currency;
     }
 
-    public void setCost(int cost) {
-        this.cost = cost;
+    public void setCostValue(int costValue) {
+        this.costValue = costValue;
     }
 
     public void setId(String id) {
@@ -60,14 +69,14 @@ public abstract class AbstractTouristVoucher {
             return false;
         }
         AbstractTouristVoucher that = (AbstractTouristVoucher) o;
-        return cost == that.cost && transport == that.transport && currency == that.currency && id.equals(that.id);
+        return costValue == that.costValue && transport == that.transport && currency == that.currency && id.equals(that.id);
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + this.getCost();
+        result = prime * result + this.getCostValue();
         return result;
     }
 
@@ -76,7 +85,7 @@ public abstract class AbstractTouristVoucher {
         return "TouristVoucher{" +
                 "transport=" + transport +
                 ", currency=" + currency +
-                ", cost=" + cost +
+                ", cost=" + costValue +
                 ", id='" + id + '\'' +
                 '}';
     }

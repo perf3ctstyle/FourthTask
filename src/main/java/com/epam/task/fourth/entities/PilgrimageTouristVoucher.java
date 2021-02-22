@@ -3,26 +3,30 @@ package com.epam.task.fourth.entities;
 import com.epam.task.fourth.enums.Currency;
 import com.epam.task.fourth.enums.Transport;
 
+import javax.xml.bind.annotation.*;
+
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType
+@XmlRootElement(name = "TouristVouchers")
 public class PilgrimageTouristVoucher extends ForeignTouristVoucher {
 
-    private final static String EMPTY_STRING = "";
-
+    @XmlAttribute(required = false)
     private boolean security;
 
     public PilgrimageTouristVoucher() {}
 
-    public PilgrimageTouristVoucher(Transport transport, Currency currency, int cost, String id, String country, boolean security) {
-        super(transport, currency, cost, id, country);
-        this.security = security;
+    public PilgrimageTouristVoucher(AbstractTouristVoucher touristVoucher) {
+        super(touristVoucher.getTransport(), touristVoucher.getCurrency(), touristVoucher.getCostValue(), touristVoucher.getId());
     }
 
     public PilgrimageTouristVoucher(ForeignTouristVoucher foreignTouristVoucher) {
         super(foreignTouristVoucher.getTransport(), foreignTouristVoucher.getCurrency(),
-                foreignTouristVoucher.getCost(), foreignTouristVoucher.getId(), foreignTouristVoucher.getCountry());
+                foreignTouristVoucher.getCostValue(), foreignTouristVoucher.getId(), foreignTouristVoucher.getCountry());
     }
 
-    public PilgrimageTouristVoucher(AbstractTouristVoucher touristVoucher) {
-        super(touristVoucher.getTransport(), touristVoucher.getCurrency(), touristVoucher.getCost(), touristVoucher.getId(), EMPTY_STRING);
+    public PilgrimageTouristVoucher(Transport transport, Currency currency, int costValue, String id, String country, boolean security) {
+        super(transport, currency, costValue, id, country);
+        this.security = security;
     }
 
     public boolean getSecurity() {
@@ -61,10 +65,10 @@ public class PilgrimageTouristVoucher extends ForeignTouristVoucher {
         return "PilgrimageTouristVoucher{" +
                 "transport=" + this.getTransport() +
                 ", currency=" + this.getCurrency() +
-                ", cost=" + this.getCost() +
+                ", costValue=" + this.getCostValue() +
                 ", id='" + this.getId() +
-                ", country='" + this.getCountry() +
-                "security=" + this.getSecurity() + '\'' +
+                "', country='" + this.getCountry() +
+                "', security=" + this.getSecurity() +
                 '}';
     }
 }

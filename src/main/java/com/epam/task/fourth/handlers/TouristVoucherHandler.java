@@ -29,10 +29,13 @@ public class TouristVoucherHandler extends DefaultHandler {
     private final static String TRANSPORT = "transport";
     private final static String COST = "cost";
     private final static String CURRENCY = "currency";
-    private final static String VALUE = "value";
+    private final static String COST_VALUE = "costValue";
     private final static String COUNTRY = "country";
     private final static String SECURITY = "security";
-    private final static List<String> TOURIST_VOUCHER_SUB_ELEMENTS = Arrays.asList(ID, TRANSPORT, COST, CURRENCY, VALUE, COUNTRY, SECURITY);
+    private final static List<String> TOURIST_VOUCHER_SUB_ELEMENTS = Arrays.asList(ID, TRANSPORT, COST, CURRENCY, COST_VALUE, COUNTRY, SECURITY);
+
+    private final static int ID_ATTRIBUTE_NUMBER = 0;
+    private final static int SECURITY_ATTRIBUTE_NUMBER = 1;
 
     public TouristVoucherHandler() {
         this.touristVouchers = new ArrayList<>();
@@ -47,11 +50,12 @@ public class TouristVoucherHandler extends DefaultHandler {
         switch (localName) {
             case FOREIGN_TOURIST_VOUCHER:
                 currentTouristVoucher = new ForeignTouristVoucher();
-                setAttributes(currentTouristVoucher, attributes);
+                setIdAttribute(currentTouristVoucher, attributes);
                 break;
             case PILGRIMAGE_TOURIST_VOUCHER:
                 currentTouristVoucher = new PilgrimageTouristVoucher();
-                setAttributes(currentTouristVoucher, attributes);
+                setIdAttribute(currentTouristVoucher, attributes);
+                setSecurityAttribute(currentTouristVoucher, attributes);
                 break;
             default:
                 if (TOURIST_VOUCHER_SUB_ELEMENTS.contains(localName)) {
@@ -73,35 +77,45 @@ public class TouristVoucherHandler extends DefaultHandler {
         if (currentTouristVoucherSubElement != null) {
             switch (currentTouristVoucherSubElement) {
                 case TRANSPORT:
+                    text = text.toUpperCase();
                     Transport transport = Transport.valueOf(text);
                     currentTouristVoucher.setTransport(transport);
                     break;
                 case CURRENCY:
+                    text = text.toUpperCase();
                     Currency currency = Currency.valueOf(text);
                     currentTouristVoucher.setCurrency(currency);
                     break;
-                case VALUE:
+                case COST_VALUE:
                     int value = Integer.parseInt(text);
-                    currentTouristVoucher.setCost(value);
+                    currentTouristVoucher.setCostValue(value);
                     break;
                 case COUNTRY:
-                    ForeignTouristVoucher foreignTouristVoucher = new ForeignTouristVoucher(currentTouristVoucher);
-                    foreignTouristVoucher.setCountry(text);
-                    currentTouristVoucher = foreignTouristVoucher;
+                    if (currentTouristVoucher.getClass() == ForeignTouristVoucher.class) {
+                        ForeignTouristVoucher foreignTouristVoucher = new ForeignTouristVoucher(currentTouristVoucher);
+                        foreignTouristVoucher.setCountry(text);
+                        currentTouristVoucher = foreignTouristVoucher;
+                    } else if (currentTouristVoucher.getClass() == PilgrimageTouristVoucher.class) {
+                        PilgrimageTouristVoucher pilgrimageTouristVoucher = (PilgrimageTouristVoucher) currentTouristVoucher;
+                        pilgrimageTouristVoucher.setCountry(text);
+                        currentTouristVoucher = pilgrimageTouristVoucher;
+                    }
                     break;
             }
+            currentTouristVoucherSubElement = null;
         }
     }
 
-    public void setAttributes(AbstractTouristVoucher touristVoucher, Attributes attributes) {
-        String id = attributes.getValue(0);
+    public void setIdAttribute(AbstractTouristVoucher touristVoucher, Attributes attributes) {
+        String id = attributes.getValue(ID_ATTRIBUTE_NUMBER);
         touristVoucher.setId(id);
-        if (attributes.getLength() == 2) {
-            PilgrimageTouristVoucher pilgrimageTouristVoucher = new PilgrimageTouristVoucher(touristVoucher);
-            String security = attributes.getValue(1);
-            boolean securityBoolean = Boolean.parseBoolean(security);
-            pilgrimageTouristVoucher.setSecurity(securityBoolean);
-            currentTouristVoucher = pilgrimageTouristVoucher;
-        }
+    }
+
+    public void setSecurityAttribute(AbstractTouristVoucher touristVoucher, Attributes attributes) {
+        PilgrimageTouristVoucher pilgrimageTouristVoucher = new PilgrimageTouristVoucher(touristVoucher);
+        String security = attributes.getValue(SECURITY_ATTRIBUTE_NUMBER);
+        boolean securityBoolean = Boolean.parseBoolean(security);
+        pilgrimageTouristVoucher.setSecurity(securityBoolean);
+        currentTouristVoucher = pilgrimageTouristVoucher;
     }
 }

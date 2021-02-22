@@ -31,7 +31,7 @@ public class DomParser implements Parser {
     private final static String TRANSPORT = "transport";
     private final static String COST = "cost";
     private final static String CURRENCY = "currency";
-    private final static String VALUE = "value";
+    private final static String COST_VALUE = "costValue";
     private final static String COUNTRY = "country";
     private final static String SECURITY = "security";
 
@@ -70,16 +70,17 @@ public class DomParser implements Parser {
         foreignTouristVoucher.setId(id);
 
         String transportString = getElementTextContent(foreignTouristVoucherElement, TRANSPORT);
+        transportString = transportString.toUpperCase();
         Transport transportEnum = Transport.valueOf(transportString);
         foreignTouristVoucher.setTransport(transportEnum);
 
-        Element costElement = (Element) foreignTouristVoucherElement.getElementsByTagName(COST).item(0);
-        String currencyString = getElementTextContent(costElement, CURRENCY);
+        String currencyString = getElementTextContent(foreignTouristVoucherElement, CURRENCY);
+        currencyString = currencyString.toUpperCase();
         Currency currencyEnum = Currency.valueOf(currencyString);
         foreignTouristVoucher.setCurrency(currencyEnum);
 
-        int cost = Integer.parseInt(getElementTextContent(costElement, VALUE));
-        foreignTouristVoucher.setCost(cost);
+        int cost = Integer.parseInt(getElementTextContent(foreignTouristVoucherElement, COST_VALUE));
+        foreignTouristVoucher.setCostValue(cost);
 
         String country = getElementTextContent(foreignTouristVoucherElement, COUNTRY);
         foreignTouristVoucher.setCountry(country);
