@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://www.example.com/TouristVouchers"
+        xmlns:tns="http://www.example.com/TouristVouchers"
+        elementFormDefault="qualified">
+
+    <element name="TouristVouchers">
+        <complexType>
+            <sequence>
+                <element ref="tns:ForeignTouristVoucher"
+                         minOccurs="2"
+                         maxOccurs="unbounded"/>
+            </sequence>
+        </complexType>
+    </element>
+
+    <complexType name="AbstractTouristVoucher">
+        <sequence>
+            <element name="transport">
+                <simpleType>
+                    <restriction base="string">
+                        <enumeration value="car" />
+                        <enumeration value="plane" />
+                        <enumeration value="boat" />
+                        <enumeration value="train" />
+                    </restriction>
+                </simpleType>
+            </element>
+
+            <element name="currency">
+                <simpleType>
+                    <restriction base="string">
+                        <enumeration value="USD" />
+                        <enumeration value="EUR" />
+                        <enumeration value="BYN" />
+                    </restriction>
+                </simpleType>
+            </element>
+
+            <element name="costValue" type="positiveInteger"/>
+        </sequence>
+
+        <attribute name="id" use="required">
+                <simpleType>
+                    <restriction base="ID">
+                        <pattern value="v\d{6}" />
+                    </restriction>
+                </simpleType>
+        </attribute>
+    </complexType>
+
+    <complexType name="ForeignTouristVoucher">
+        <complexContent>
+            <extension base="tns:AbstractTouristVoucher">
+                <sequence>
+                    <element name="country" type="string"/>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name="PilgrimageTouristVoucher">
+        <complexContent>
+            <extension base="tns:ForeignTouristVoucher">
+                <attribute name="security" type="boolean" use="optional" default="false"/>
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <element name="ForeignTouristVoucher" type="tns:ForeignTouristVoucher" />
+    <element name="PilgrimageTouristVoucher" type="tns:PilgrimageTouristVoucher" substitutionGroup="tns:ForeignTouristVoucher" />
+
+</schema>
